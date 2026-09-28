@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ComicCraft - AI Comic Story Creator</title>
+  <meta name="description" content="Create personalized comic book stories, character dialogues, and illustrations with Google Gemini models and Stable Diffusion.">
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="halftone-accent">
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a href="/" class="logo-link" id="logo-link">
+        <span class="logo-badge">POW!</span>
+        <span class="logo-text">ComicCraft</span>
+      </a>
+      <nav class="nav-links">
+        <a href="/docs" class="nav-item" target="_blank">
+          <span class="pill-badge">API</span>
+          <span>Docs</span>
+        </a>
+        <a href="#comic-craft-form" class="nav-item">
+          <span>Create Story</span>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="container">
+      <div class="hero-tag">
+        <span>⚡ Powered by Gemini 1.5 Flash, Gemini Pro & Stable Diffusion</span>
+      </div>
+      <h1 class="hero-title">
+        Bring Your Stories to Life in <span class="highlight">Comic Panels!</span>
+      </h1>
+      <p class="hero-subtitle">
+        Transform simple ideas into full 5-panel comic strips complete with dynamic character dialogue, cinematic scene descriptions, AI illustrations, and exportable PDF comic books.
+      </p>
+
+      <!-- Preset Story Idea Chips -->
+      <div class="presets-wrap">
+        <span style="font-size: 0.85rem; color: var(--text-dim); align-self: center; margin-right: 4px;">Try an idea:</span>
+        <button type="button" class="preset-chip" 
+          data-prompt="A brave fox exploring an enchanted glowing forest discovers a forgotten ancient shrine."
+          data-char="Finley the Fox"
+          data-setting="Enchanted Forest"
+          data-tone="Dramatic"
+          data-style="Anime">
+          🦊 Finley's Enchanted Forest
+        </button>
+        <button type="button" class="preset-chip"
+          data-prompt="A witty robot barista in a bustling neon city accidentally invents a time-traveling espresso machine."
+          data-char="Byte-07"
+          data-setting="Futuristic City"
+          data-tone="Funny"
+          data-style="Comic Book">
+          ☕ The Time-Traveling Barista
+        </button>
+        <button type="button" class="preset-chip"
+          data-prompt="An adventurous astronaut discovers a floating crystal sanctuary on the edge of the galaxy."
+          data-char="Captain Nora"
+          data-setting="Deep Space"
+          data-tone="Poetic"
+          data-style="Realistic">
+          🌌 Starlight Sanctuary
+        </button>
+        <button type="button" class="preset-chip"
+          data-prompt="A high school student discovers their sketchbook drawings come to life when the clock strikes midnight."
+          data-char="Maya Lin"
+          data-setting="High School"
+          data-tone="Light-hearted"
+          data-style="Pixel Art">
+          🎨 Midnight Sketchbook
+        </button>
+      </div>
+
+      <!-- Main Form Card -->
+      <div class="form-card">
+        {% if error %}
+        <div style="background: rgba(255, 51, 102, 0.15); border: 2px solid var(--accent-red); color: #ff8099; padding: 14px 18px; border-radius: 12px; margin-bottom: 24px; text-align: left;">
+          <strong>Error:</strong> {{ error }}
+        </div>
+        {% endif %}
+
+        <form action="/generate" method="POST" id="comic-craft-form">
+          <div class="form-grid">
+
+            <!-- Story Prompt -->
+            <div class="form-group full-width">
+              <label for="story_prompt" class="form-label">
+                <span>Story Prompt or Idea</span>
+                <span class="req">*</span>
+                <span class="label-hint">(Describe the premise, conflict, or scene)</span>
+              </label>
+              <textarea 
+                id="story_prompt" 
+                name="story_prompt" 
+                class="form-textarea" 
+                placeholder="e.g. A brave fox exploring an enchanted forest uncovers a magical crystal that controls the seasons..." 
+                required>{{ story_prompt or '' }}</textarea>
+            </div>
+
+            <!-- Main Character Name -->
+            <div class="form-group">
+              <label for="character_name" class="form-label">
+                <span>Main Character Name</span>
+                <span class="req">*</span>
+                <span class="label-hint">(Hero of your comic)</span>
+              </label>
+              <input 
+                type="text" 
+                id="character_name" 
+                name="character_name" 
+                class="form-input" 
+                placeholder="e.g. Finley, Captain Nora, Dr. Neon" 
+                value="{{ character_name or '' }}" 
+                required>
+            </div>
+
+            <!-- Setting -->
+            <div class="form-group">
+              <label for="setting" class="form-label">
+                <span>Setting / World</span>
+                <span class="label-hint">(Location of the story)</span>
+              </label>
+              <select id="setting" name="setting" class="form-select">
+                <option value="Enchanted Forest" selected>🌲 Enchanted Forest</option>
+                <option value="Futuristic City">🏙️ Futuristic Neon City</option>
+                <option value="Deep Space">🚀 Deep Space & Galaxy</option>
+                <option value="High School">🏫 High School Academy</option>
+                <option value="Ancient Temple Ruins">🏛️ Ancient Temple Ruins</option>
+                <option value="Cyberpunk Underworld">⚡ Cyberpunk Underworld</option>
+                <option value="Steampunk Kingdom">⚙️ Steampunk Kingdom</option>
+              </select>
+            </div>
+
+            <!-- Story Tone -->
+            <div class="form-group">
+              <label for="tone" class="form-label">
+                <span>Story Tone</span>
+                <span class="label-hint">(Mood & narrative feel)</span>
+              </label>
+              <select id="tone" name="tone" class="form-select">
+                <option value="Dramatic" selected>🎭 Dramatic & Intense</option>
+                <option value="Funny">😂 Funny & Light-hearted</option>
+                <option value="Poetic">✨ Poetic & Atmospheric</option>
+                <option value="Epic">⚔️ Epic & Heroic</option>
+                <option value="Mysterious">🔍 Mysterious & Suspenseful</option>
+              </select>
+            </div>
+
+            <!-- Art Style -->
+            <div class="form-group">
+              <label for="art_style" class="form-label">
+                <span>Visual Art Style</span>
+                <span class="label-hint">(Illustration technique)</span>
+              </label>
+              <select id="art_style" name="art_style" class="form-select">
+                <option value="Comic Book" selected>💥 Classic Comic Book</option>
+                <option value="Anime">🌸 Japanese Anime / Manga</option>
+                <option value="Pixel Art">👾 Retro Pixel Art</option>
+                <option value="Realistic">🎬 Realistic & Cinematic</option>
+                <option value="Graphic Novel Noir">🕵️ Graphic Novel Noir</option>
+                <option value="Watercolor">🎨 Vibrant Watercolor</option>
+              </select>
+            </div>
+
+            <!-- Hidden / Default Number of Panels -->
+            <input type="hidden" name="num_panels" value="5">
+
+            <!-- Submit Button -->
+            <div class="form-group full-width">
+              <button type="submit" class="btn-submit-craft" id="btn-submit-craft">
+                <span>⚡ GENERATE COMIC STORY</span>
+              </button>
+            </div>
+
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Generation Loading Overlay Modal -->
+  <div class="loading-overlay" id="loading-overlay">
+    <div class="loading-box">
+      <div class="spinner-comic"></div>
+      <h2 class="loading-title">CRAFTING COMIC...</h2>
+      <p style="color: var(--text-muted); font-size: 0.95rem;">
+        Google Gemini and AI Image Generators are assembling your story.
+      </p>
+
+      <div class="loading-steps">
+        <div class="loading-step active" id="step-outline">
+          <span>⚙️</span> 1. Outlining 5-Panel Arc (Gemini Flash)...
+        </div>
+        <div class="loading-step" id="step-story">
+          <span>✍️</span> 2. Writing Dialogue & Captions (Gemini Pro)...
+        </div>
+        <div class="loading-step" id="step-images">
+          <span>🎨</span> 3. Generating Comic Illustrations (Stable Diffusion)...
+        </div>
+        <div class="loading-step" id="step-pdf">
+          <span>📑</span> 4. Assembling Layout & Exporting PDF...
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <p>ComicCraft © 2026. Built with FastAPI, Google Gemini Models, and Stable Diffusion.</p>
+    </div>
+  </footer>
+
+  <script src="/static/js/script.js"></script>
+</body>
+</html>

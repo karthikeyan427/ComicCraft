@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Comic Exported Successfully - ComicCraft</title>
+  <meta name="description" content="Your comic book has been compiled and downloaded successfully.">
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="halftone-accent">
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a href="/" class="logo-link">
+        <span class="logo-badge">POW!</span>
+        <span class="logo-text">ComicCraft</span>
+      </a>
+      <nav class="nav-links">
+        <a href="/" class="nav-item">
+          <span>Home</span>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="success-card">
+      <div class="success-icon">✓</div>
+      <h1 class="success-title">COMIC EXPORTED!</h1>
+      <p class="success-desc">
+        Your AI-powered comic book <strong>"{{ title }}"</strong> has been successfully compiled and downloaded to your device as a high-quality multi-page PDF.
+      </p>
+
+      {% if pdf_url %}
+      <div style="margin-bottom: 30px;">
+        <a href="{{ pdf_url }}" download="{{ pdf_filename }}" class="btn-download-pdf" style="font-size: 1.1rem; padding: 10px 22px;">
+          <span>🔄 Download Again ({{ pdf_filename }})</span>
+        </a>
+      </div>
+      {% endif %}
+
+      <div>
+        <a href="/" class="btn-create-another" id="btn-create-another">
+          <span>✨ Go Create Another Comic</span>
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <p>ComicCraft © 2026. Built with FastAPI, Google Gemini Models, and Stable Diffusion.</p>
+    </div>
+  </footer>
+
+</body>
+</html>
